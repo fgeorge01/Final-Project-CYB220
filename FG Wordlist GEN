@@ -1,0 +1,42 @@
+
+from itertools import product
+import string
+
+print('''
+    
+ ________  ______         _______                                                                       __         ______                      
+/        |/      \       /       \                                                                     /  |       /      \                     
+$$$$$$$$//$$$$$$  |      $$$$$$$  | ______    _______  _______  __   __   __   ______    ______    ____$$ |      /$$$$$$  |  ______   _______  
+$$ |__   $$ | _$$/       $$ |__$$ |/      \  /       |/       |/  | /  | /  | /      \  /      \  /    $$ |      $$ | _$$/  /      \ /       \ 
+$$    |  $$ |/    |      $$    $$/ $$$$$$  |/$$$$$$$//$$$$$$$/ $$ | $$ | $$ |/$$$$$$  |/$$$$$$  |/$$$$$$$ |      $$ |/    |/$$$$$$  |$$$$$$$  |
+$$$$$/   $$ |$$$$ |      $$$$$$$/  /    $$ |$$      \$$      \ $$ | $$ | $$ |$$ |  $$ |$$ |  $$/ $$ |  $$ |      $$ |$$$$ |$$    $$ |$$ |  $$ |
+$$ |     $$ \__$$ |      $$ |     /$$$$$$$ | $$$$$$  |$$$$$$  |$$ \_$$ \_$$ |$$ \__$$ |$$ |      $$ \__$$ |      $$ \__$$ |$$$$$$$$/ $$ |  $$ |
+$$ |     $$    $$/       $$ |     $$    $$ |/     $$//     $$/ $$   $$   $$/ $$    $$/ $$ |      $$    $$ |      $$    $$/ $$       |$$ |  $$ |
+$$/       $$$$$$/        $$/       $$$$$$$/ $$$$$$$/ $$$$$$$/   $$$$$/$$$$/   $$$$$$/  $$/        $$$$$$$/        $$$$$$/   $$$$$$$/ $$/   $$/ 
+                                                                                                                                               
+Hello my name is Franklin George and I am a Student at Anderson University. This script has been created for amateur pentesters looking for a simple solution to wordlist generation based on their victim's accessible information.\nI've primarily created this for bruteforcing passwords based on personal information. I have given the option, to be able to add additional characters in the mix if character count is required.\nHappy Cracking!
+                                                                                                                                               ''')
+
+base_word = (input("Enter known plaintext of the password (AKA name or alias): "))
+birth_year = (input("Would you happen to know the birth year of the target? If so, please state it: "))
+min_char = int(input("Enter minimum amount of additional characters: "))
+max_char = int(input("Enter maximum amount of additional characters: "))
+
+counter = 0
+character = string.digits+string.punctuation+string.ascii_letters+string.hexdigits
+
+file_open = open("wordlist.txt", 'w')
+
+for i in range(min_char,max_char+1):
+    for j in product(character, repeat=i):
+        word = "".join(j)
+        file_open.write(base_word + birth_year + word)
+        file_open.write('\n')
+        file_open.write(birth_year + base_word + word)
+        file_open.write('\n')
+        file_open.write(word + base_word + birth_year)
+        file_open.write('\n')
+        file_open.write(word + birth_year + base_word)
+        file_open.write('\n')
+        counter+=1
+print("Wordlist of {} passwords created".format(counter))
